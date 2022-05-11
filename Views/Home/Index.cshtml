@@ -1,0 +1,40 @@
+﻿@model IEnumerable<bugtracker.Models.Issue>
+@{
+    ViewData["Title"] = "Index";
+}
+
+<div class="cardcontainer">
+    <h1 class="collabel col1">Not Started</h1>
+    <h1 class="collabel col2">In Progress</h1>
+    <h1 class="collabel col3">Completed</h1>
+    @foreach (var item in Model) {
+        if(item.Status == "In Progress"){
+            <div class="card col2">
+                <p> ID: @Html.DisplayFor(modelItem => item.Id) </p>
+                <p> @Html.DisplayFor(modelItem => item.Name) </p>
+                <p> @Html.DisplayFor(modelItem => item.Description) </p>
+                <p> @Html.DisplayFor(modelItem => item.Type) </p>
+                <p> @Html.DisplayFor(modelItem => item.Priority) </p>
+                <p class="statuslabel"> @Html.DisplayFor(modelItem => item.Status) </p>
+            </div>
+        }else if(item.Status == "Complete"){
+            <div class="card col3">
+                <p> ID: @Html.DisplayFor(modelItem => item.Id) </p>
+                <p> @Html.DisplayFor(modelItem => item.Name) </p>
+                <p> @Html.DisplayFor(modelItem => item.Description) </p>
+                <p> @Html.DisplayFor(modelItem => item.Type) </p>
+                <p> @Html.DisplayFor(modelItem => item.Priority) </p>
+                <p class="statuslabel"> @Html.DisplayFor(modelItem => item.Status) </p>
+            </div>
+        }else{
+            <div class="card col1">
+                <p> ID: @Html.DisplayFor(modelItem => item.Id) </p>
+                <p> @Html.DisplayFor(modelItem => item.Name) </p>
+                <p> @Html.DisplayFor(modelItem => item.Description) </p>
+                <p> @Html.DisplayFor(modelItem => item.Type) </p>
+                <p> @Html.DisplayFor(modelItem => item.Priority) </p>
+                <p class="statuslabel"> @Html.DisplayFor(modelItem => item.Status) </p>
+            </div>  
+        }
+    }
+</div>

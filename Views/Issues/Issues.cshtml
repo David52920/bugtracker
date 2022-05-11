@@ -1,0 +1,54 @@
+﻿@{
+    ViewData["Title"] = "Issues";
+}
+
+@model bugtracker.Models.Issue;
+
+<div>
+    @using (Html.BeginForm("Issues", "Issues"))
+    {
+        <table>
+            <tr>
+                <td class="issue-labels">
+                    @Html.Label("Issue Name:")
+                </td>
+                <td>
+                    <input type="text" name="Name">
+                </td>
+            </tr>
+            <tr>
+                <td class="issue-labels">
+                    @Html.Label("Issue Type:")
+                </td>
+                <td>
+                    @Html.DropDownList("Types")
+                </td>
+            </tr>
+            <tr>
+                <td class="issue-labels">
+                    @Html.Label("Due Date:")
+                </td>
+                <td>
+                    <input type="date" name="DueDate">
+                </td>
+            </tr>
+            <tr>
+                <td class="issue-labels">
+                    @Html.Label("Priority:")
+                </td>
+                <td>
+                    @Html.DropDownList("Priorities")
+                </td>
+            </tr>
+            <tr>
+                <td class="issue-labels">
+                    @Html.Label("Issue Description:")
+                </td>
+                <td>
+                    <textarea rows="5" cols="50" name="Description" placeholder="brief bug description"></textarea>
+                </td>
+            </tr>
+        </table>
+        <input type="submit" value="Submit">
+    }
+</div>
