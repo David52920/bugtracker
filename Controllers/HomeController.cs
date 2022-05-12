@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Html;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using bugtracker.Models;
@@ -23,9 +25,27 @@ public class HomeController : Controller
     // GET: Issues
     public async Task<IActionResult> Index()
     {
-        return _context.Issue != null ? 
-                    View(await _context.Issue.ToListAsync()) :
-                    Problem("Entity set 'BugTrackerContext.Issue'  is null.");
+        HttpContext.Session.SetString("Username", "DR");
+        DateTime date = DateTime.Now;
+        string timeOfDay = date.TimeOfDay > new TimeSpan(11, 59, 00) ? "afternoon" : "morning";
+        ViewBag.User = $"drees" ;
+        ViewBag.Date = $"{date.DayOfWeek}, May {date.Day}";
+        ViewBag.Greeting = $"Good {timeOfDay}, {ViewBag.User}";
+        if (_context.Issue != null){
+            return View();
+        }else{
+            return Problem("Entity set 'BugTrackerContext.Issue'  is null.");
+        }
+    }
+
+    public async Task<ActionResult> MyIssuesPartial()
+    {
+        return ViewComponent("Index", await _context.Issue.Where(issue => issue.StartedBy == TempData["Username"]).ToListAsync());
+    }
+
+    public async Task<ActionResult> AllIssuesPartial()
+    {
+        return ViewComponent("Index", await _context.Issue.ToListAsync());
     }
 
     public IActionResult Privacy()

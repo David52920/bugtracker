@@ -14,6 +14,7 @@ html {
 }
 
 body {
+  background-color: #1E1F21;
   margin-bottom: 60px;
 }
 
@@ -28,22 +29,26 @@ body {
 }
 
 .cardcontainer{
-  display: grid;
+  display: flex;
   max-height: 85vh;
-  width: 100%;
-  overflow-y: scroll;
 }
 
 .col1{
-  grid-column-start: 1;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   margin-right: 10px;
 }
 .col2{
-  grid-column-start: 2;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   margin-right: 10px;
 }
 .col3{
-  grid-column-start: 3;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
 }
 
 .collabel{
@@ -51,6 +56,13 @@ body {
   color: gray;
   border: 1px solid gray;
   border-radius: 15px;
+  max-height: 50px;
+  max-width: 300px;
+}
+
+.colheader{
+  display: flex;
+  justify-content: space-around;
 }
 
 .statuslabel{
@@ -59,4 +71,87 @@ body {
 
 .prioritylabel{
 
+}
+
+.issuesStatus {
+  align-items: center;
+  display: inline-flex;
+  background-color: #252628;
+  border-radius: 60px;
+  padding: 5px 25px 5px 25px;
+  max-width: fit-content;
+  height: 4em;
+  text-align: center;
+  justify-self: center;
+}
+
+.Typography--textAlignCenter {
+  text-align: center;
+}
+
+.WidgetContainer {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  align-items: center;
+}
+
+.Widget {
+  box-sizing: border-box;
+  padding: 8px;
+}
+
+.Achievement-Widget {
+  display: grid;
+  margin-bottom: 12px;
+  margin-top: 16px;
+}
+
+.MyIssues-Widget {
+  margin-right: 5px;
+  display: flex;
+  flex-direction: column;
+}
+
+.MyIssues-Widget-Title {
+  padding-right: 8px;
+}
+
+.MyIssues-Content {
+  height: inherit;
+  overflow-y: scroll;
+}
+
+.MyIssues-Header {
+  padding: 24px 24px 0;
+  border-bottom: 1px solid #424244;
+}
+
+.AllIssues-Widget {
+  display: flex;
+  flex-direction: column;
+}
+
+.AllIssues-Widget-Title {
+  padding-right: 8px;
+}
+
+.AllIssues-Header {
+  display: flex;
+  padding: 24px 24px 0;
+  border-bottom: 1px solid #424244;
+}
+
+.AllIssues-Content {
+  height: inherit;
+  overflow-y: scroll;
+}
+
+.Card {
+  background-color: #2A2B2D ;
+  border: 1px solid #424244;
+  border-radius: 8px;
+  width: 50%;
+  padding: 8px;
+  height: 400px;
 }

@@ -12,12 +12,9 @@ namespace bugtracker.Controllers
     public class IssuesController : Controller
     {
         private readonly BugTrackerContext _context;
-        private User currentUser;
 
         public IssuesController(BugTrackerContext context)
         {
-            currentUser = new User();
-            currentUser.Username = "DR";
             _context = context;
         }
 
@@ -25,7 +22,7 @@ namespace bugtracker.Controllers
         public async Task<IActionResult> Index()
         {
               return _context.Issue != null ? 
-                          View(await _context.Issue.Where(issue => issue.StartedBy == currentUser.Username).ToListAsync()) :
+                          View(await _context.Issue.Where(issue => issue.StartedBy == HttpContext.Session.GetString("Username")).ToListAsync()) :
                           Problem("Entity set 'BugTrackerContext.Issue'  is null.");
         }
 
@@ -58,8 +55,10 @@ namespace bugtracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Priority,DueDate,Type,Status,StartedBy,CompletedBy")] Issue issue)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,Priority,DueDate,Type")] Issue issue)
         {
+            issue.StartedBy = HttpContext.Session.GetString("Username");
+            issue.Status = "Pending";
             if (ModelState.IsValid)
             {
                 _context.Add(issue);
