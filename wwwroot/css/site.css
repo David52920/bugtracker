@@ -15,7 +15,29 @@ html {
 
 body {
   background-color: #1E1F21;
+  margin-top: auto;
   margin-bottom: 60px;
+}
+
+.container-centered {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  max-height: 100vh;
+  overflow-y: auto;
+  width: 100%;
+  text-align: center;
+  transform: translate(-50%,-50%);
+}
+
+.closebutton{ 
+  position: absolute;
+  top: 1%;
+  right: 2%;
+}
+
+.form-group {
+  margin-bottom: 5px;
 }
 
 .card{
@@ -107,6 +129,11 @@ body {
   margin-top: 16px;
 }
 
+.MyIssues-View {
+  overflow-y: auto;
+  height: 100vh;
+}
+
 .MyIssues-Widget {
   margin-right: 5px;
   display: flex;
@@ -154,4 +181,14 @@ body {
   width: 50%;
   padding: 8px;
   height: 400px;
+}
+
+.modal-content {
+  background-color: #1E1F21;
+  border-radius: 35px;
+}
+
+.hidden
+{
+    display: none;
 }

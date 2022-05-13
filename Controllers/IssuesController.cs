@@ -21,20 +21,20 @@ namespace bugtracker.Controllers
         // GET: Issues
         public async Task<IActionResult> Index()
         {
-              return _context.Issue != null ? 
-                          View(await _context.Issue.Where(issue => issue.StartedBy == HttpContext.Session.GetString("Username")).ToListAsync()) :
-                          Problem("Entity set 'BugTrackerContext.Issue'  is null.");
+              return _context.Issues != null ? 
+                          View(await _context.Issues.Where(issue => issue.StartedBy == HttpContext.Session.GetString("Username")).ToListAsync()) :
+                          Problem("Entity set 'BugTrackerContext.Issues'  is null.");
         }
 
         // GET: Issues/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null || _context.Issue == null)
+            if (id == null || _context.Issues == null)
             {
                 return NotFound();
             }
 
-            var issue = await _context.Issue
+            var issue = await _context.Issues
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (issue == null)
             {
@@ -71,12 +71,12 @@ namespace bugtracker.Controllers
         // GET: Issues/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null || _context.Issue == null)
+            if (id == null || _context.Issues == null)
             {
                 return NotFound();
             }
 
-            var issue = await _context.Issue.FindAsync(id);
+            var issue = await _context.Issues.FindAsync(id);
             if (issue == null)
             {
                 return NotFound();
@@ -122,12 +122,12 @@ namespace bugtracker.Controllers
         // GET: Issues/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.Issue == null)
+            if (id == null || _context.Issues == null)
             {
                 return NotFound();
             }
 
-            var issue = await _context.Issue
+            var issue = await _context.Issues
                 .FirstOrDefaultAsync(m => m.Id == id);
             if (issue == null)
             {
@@ -142,14 +142,14 @@ namespace bugtracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.Issue == null)
+            if (_context.Issues == null)
             {
-                return Problem("Entity set 'BugTrackerContext.Issue'  is null.");
+                return Problem("Entity set 'BugTrackerContext.Issues'  is null.");
             }
-            var issue = await _context.Issue.FindAsync(id);
+            var issue = await _context.Issues.FindAsync(id);
             if (issue != null)
             {
-                _context.Issue.Remove(issue);
+                _context.Issues.Remove(issue);
             }
             
             await _context.SaveChangesAsync();
@@ -158,7 +158,7 @@ namespace bugtracker.Controllers
 
         private bool IssueExists(int id)
         {
-          return (_context.Issue?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Issues?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

@@ -19,6 +19,6 @@ public class AllIssuesViewComponent : ViewComponent
 
     public async Task<IViewComponentResult> InvokeAsync()
     {
-        return View(await _context.Issue.ToListAsync());
+        return View(await _context.Issues.ToListAsync());
     }
 }

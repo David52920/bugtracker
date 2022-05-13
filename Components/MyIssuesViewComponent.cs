@@ -19,6 +19,6 @@ public class MyIssuesViewComponent : ViewComponent
 
     public async Task<IViewComponentResult> InvokeAsync()
     {
-        return View(await _context.Issue.Where(issue => issue.StartedBy == HttpContext.Session.GetString("Username")).ToListAsync());
+        return View(await _context.Issues.Where(issue => issue.StartedBy == HttpContext.Session.GetString("Username")).ToListAsync());
     }
 }
