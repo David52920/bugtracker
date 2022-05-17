@@ -19,15 +19,15 @@ body {
   margin-bottom: 60px;
 }
 
-.container-centered {
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  max-height: 100vh;
-  overflow-y: auto;
-  width: 100%;
-  text-align: center;
-  transform: translate(-50%,-50%);
+.myHeader {
+  background-color: #0C7CFA;
+}
+
+.login-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
 }
 
 .closebutton{ 
@@ -38,6 +38,15 @@ body {
 
 .form-group {
   margin-bottom: 5px;
+}
+
+.login {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 500px;
+  height: 300px;
 }
 
 .card{
@@ -146,7 +155,7 @@ body {
 
 .MyIssues-Content {
   height: inherit;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .MyIssues-Header {
@@ -163,15 +172,15 @@ body {
   padding-right: 8px;
 }
 
-.AllIssues-Header {
+.Widget-Header {
   display: flex;
-  padding: 24px 24px 0;
+  padding: 24px 24px 5px;
   border-bottom: 1px solid #424244;
 }
 
 .AllIssues-Content {
   height: inherit;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .Card {
@@ -188,7 +197,105 @@ body {
   border-radius: 35px;
 }
 
-.hidden
-{
-    display: none;
+.sidenav {
+  height: 100%;
+  width: 0;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #212529;
+  overflow-x: hidden;
+  transition: 0.5s;
+  padding-top: 60px;
+}
+
+.sidenav a {
+  padding: 8px 8px 8px 32px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #818181;
+  display: block;
+  transition: 0.3s;
+}
+
+.sidenav a:hover {
+  background-color: #0C7CFA !important;
+}
+
+.sidenav .closebtn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  font-size: 36px;
+  margin-left: 50px;
+}
+
+#main {
+  transition: margin-left .7s;
+}
+
+.userButton {
+  display: block;
+  height: 50px;
+  width: 50px;
+  border-radius: 50%;
+  border: 1px solid black;
+  z-index: 1000;
+  background-color: forestgreen;
+  text-decoration: none;
+  text-align: center;
+}
+
+.userInital {
+  position: relative;
+  color: black;
+}
+
+.dropdown-link {
+  position: relative;
+  display: inline-block;
+}
+
+.dropdown-link .dropbtn {
+  margin: 0;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #212529;
+  min-width: 160px;
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.6);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  position: relative;
+  float: none;
+  color: black;
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+  text-align: left;
+}
+
+.dropdown-content a:hover {
+  background-color: #0C7CFA;
+}
+
+.show {
+  display: block;
+  top: 116%;
+  right: -20%;
+}
+
+#main-content {
+  transition: margin-left .7s;
+}
+
+.issueCountNum {
+  font-size: 27px;
+  padding-left: 5px;
+  padding-right: 5px;
 }

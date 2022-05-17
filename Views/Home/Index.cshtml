@@ -4,24 +4,56 @@
 }
 <h5 class="Typography--textAlignCenter"> @ViewBag.Date </h5>
 <h2 class="Typography--textAlignCenter"> @ViewBag.Greeting </h2>
-<div class=Achievement-Widget><div class="issuesStatus"> Issues Status</div></div>
+<div class=Achievement-Widget>
+    <div class="issuesStatus">
+        <span class="issueCountNum">@ViewBag.PendingCount</span> Pending | 
+        <span class="issueCountNum">@ViewBag.InProgressCount</span> In Progress |
+        <span class="issueCountNum" >@ViewBag.CompletedCount</span> Completed
+    </div>
+</div>
 
 <div class="WidgetContainer"> 
     <div class="Widget MyIssues-Widget Card">
-        <div class="MyIssues-Header">
+        <div class="Widget-Header">
             <h4 class="MyIssues-Widget-Title">My Issues</h4>
+            @Html.DropDownList("MyStatus", (SelectList)ViewBag.status, null, new { @class = "btn btn-primary dropdown-toggle" })
         </div>
-        <div class="MyIssues-Content"> 
+        <div id="My-Content" class="MyIssues-Content"> 
             @await Component.InvokeAsync("MyIssues")
         </div>
     </div>
     <div class=" Widget AllIssues-Widget Card"> 
-        <div class="AllIssues-Header">
+        <div class="Widget-Header">
             <h4 class="AllIssues-Widget-Title">All Issues</h4>
-            <div><span>Dropdown</span></div>
+            @Html.DropDownList("AllStatus", (SelectList)ViewBag.status, null, new { @class = "btn btn-primary dropdown-toggle" })
         </div>
-        <div class="AllIssues-Content"> 
+        <div id="All-Content" class="AllIssues-Content"> 
             @await Component.InvokeAsync("AllIssues")
         </div>
     </div>
 </div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script>
+    $('#AllStatus').change(function () {
+        var selectedstatus = $(this).val();
+        $.ajax({
+            type: "Post",
+            url: '@Url.Action("ReloadAll")',
+            data : {status : selectedstatus},
+            success: function (data) {
+                document.getElementById("All-Content").innerHTML = data;
+            },
+        })
+    });
+    $('#MyStatus').change(function () {
+        var selectedstatus = $(this).val();
+        $.ajax({
+            type: "Post",
+            url: '@Url.Action("ReloadMy")',
+            data : {status : selectedstatus},
+            success: function (data) {
+                document.getElementById("My-Content").innerHTML = data;
+            },
+        })
+    });
+</script>

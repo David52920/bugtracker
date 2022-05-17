@@ -17,8 +17,11 @@ public class AllIssuesViewComponent : ViewComponent
         _context = context;
     }
 
-    public async Task<IViewComponentResult> InvokeAsync()
+    public async Task<IViewComponentResult> InvokeAsync(string status)
     {
-        return View(await _context.Issues.ToListAsync());
+        if (status == null){
+            status = "All";
+        }
+        return status == "All" ? View(await _context.Issues.ToListAsync()) : View(await _context.Issues.Where(issue => issue.Status == status).ToListAsync());
     }
 }

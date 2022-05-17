@@ -17,8 +17,13 @@ public class MyIssuesViewComponent : ViewComponent
         _context = context;
     }
 
-    public async Task<IViewComponentResult> InvokeAsync()
+    public async Task<IViewComponentResult> InvokeAsync(string status)
     {
-        return View(await _context.Issues.Where(issue => issue.StartedBy == HttpContext.Session.GetString("Username")).ToListAsync());
+        if (status == null){
+            status = "All";
+        }
+        return status == "All" ? View(await _context.Issues.Where(issue => issue.Assigned == HttpContext.Session.GetString("Username")).ToListAsync()) : 
+                                View(await _context.Issues.Where(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == status).ToListAsync());
     }
+    
 }

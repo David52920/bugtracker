@@ -14,5 +14,6 @@ public class Issue
     public string? Type { get; set; }
     public string? Status { get; set; }
     public string? StartedBy { get; set; }
+    public string? Assigned { get; set; }
     public string? CompletedBy { get; set; }
 }

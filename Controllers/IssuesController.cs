@@ -22,7 +22,7 @@ namespace bugtracker.Controllers
         public async Task<IActionResult> Index()
         {
               return _context.Issues != null ? 
-                          View(await _context.Issues.Where(issue => issue.StartedBy == HttpContext.Session.GetString("Username")).ToListAsync()) :
+                          View(await _context.Issues.Where(issue => issue.Assigned == HttpContext.Session.GetString("Username")).ToListAsync()) :
                           Problem("Entity set 'BugTrackerContext.Issues'  is null.");
         }
 

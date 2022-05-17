@@ -32,8 +32,14 @@ public class HomeController : Controller
                 HttpContext.Session.SetString("AuthenticatedUser", "true");
                 DateTime date = DateTime.Now;
                 string timeOfDay = date.TimeOfDay > new TimeSpan(11, 59, 00) ? "afternoon" : "morning";
+                ViewBag.activeStatus = "Pending";
                 ViewBag.Date = $"{date.DayOfWeek}, May {date.Day}";
                 ViewBag.Greeting = $"Good {timeOfDay}, {HttpContext.Session.GetString("FirstName")}";
+                ViewBag.PendingCount = _context.Issues.Count(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == "Pending");
+                ViewBag.InProgressCount = _context.Issues.Count(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == "In Progress");
+                ViewBag.CompletedCount = _context.Issues.Count(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == "Completed");
+                List<string> optionList = new List<string>{ "All", "Pending", "In Progress", "Completed" };
+                ViewBag.status = new SelectList(optionList);
                 return View();
             }else{
                 return RedirectToAction("Login");
@@ -77,6 +83,16 @@ public class HomeController : Controller
     }
 
     [HttpPost]
+    public IActionResult ReloadAll(string status){
+        return ViewComponent("AllIssues", status);
+    }
+
+    [HttpPost]
+    public IActionResult ReloadMy(string status){
+        return ViewComponent("MyIssues", status);
+    }
+
+    [HttpPost]
     [ValidateAntiForgeryToken]
     public ActionResult Login(string username,string password)
     {
@@ -90,6 +106,7 @@ public class HomeController : Controller
                 HttpContext.Session.SetString("FirstName", data.FirstOrDefault().FirstName);
                 HttpContext.Session.SetString("Email", data.FirstOrDefault().Email);
                 HttpContext.Session.SetString("Username", data.FirstOrDefault().Username);
+                HttpContext.Session.SetString("FirstLast", data.FirstOrDefault().FirstName.Substring(0, 1) + data.FirstOrDefault().LastName.Substring(0, 1));
                 HttpContext.Session.SetString("UserID", data.FirstOrDefault().Id.ToString());
                 return RedirectToAction("Index");
             }
@@ -123,7 +140,8 @@ public class HomeController : Controller
         }
         return byte2String;
     }
-    
+
+        
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {
