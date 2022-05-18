@@ -6,6 +6,7 @@
 <h3>Users can view list of all views or filter out by status</h3>
 <img src=./Content/assets/main.PNG>
 <img src=./Content/assets/main2.PNG>
+<h5>Individual rows can be selected to view/edit the issue</h5>
 
 # Login Interface
 <h3>Simple login system</h3>

@@ -32,8 +32,17 @@
         </div>
     </div>
 </div>
+
+<div id="myModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header"><span id="cls" class="close">&times;</span></div>
+        <div class="modal-data"> </div>
+    </div>
+</div>
+
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script>
+    var modal = document.getElementById("myModal");
     $('#AllStatus').change(function () {
         var selectedstatus = $(this).val();
         $.ajax({
@@ -56,4 +65,24 @@
             },
         })
     });
+    $(".selectable-row").dblclick(function() {
+        var id = $(this).find('td:eq(0)').text();
+        Edit(id);
+    });
+    $('#cls').click(function() {
+        $("myModal").css("display", "none");
+    });
+    window.onclick = function(event) {
+        if (event.target == modal) {
+            modal.style.display = "none";
+        }
+    }
+    function Edit(id) {
+        $.get("@Url.Action("Edit","Issues")/" + id,
+            function (data) {
+                $('.modal-data').html($("#EditView", data));
+            });
+        $("#back-list-button").css("display", "none");
+        modal.style.display = "block";
+    }
 </script>

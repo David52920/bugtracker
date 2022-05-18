@@ -54,14 +54,12 @@
     <script>
         function openNav() {
             document.getElementById("mySidenav").style.width = "250px";
-            document.getElementById("main").style.marginLeft = "250px";
             document.getElementById("main-content").style.marginLeft = "250px";
             document.getElementById("main-content").style.opacity= 0.5;
         }
 
         function closeNav() {
             document.getElementById("mySidenav").style.width = "0";
-            document.getElementById("main").style.marginLeft= "0";
             document.getElementById("main-content").style.marginLeft = "0";
             document.getElementById("main-content").style.opacity= 1;
         }
@@ -69,8 +67,12 @@
         function myFunction() {
             document.getElementById("myDropdown").classList.toggle("show");
         }
-
+        var modal = document.getElementById("myModal");
+        var cls = document.getElementById("cls");
         window.onclick = function(e) {
+            $('#cls').click(function() {
+                modal.style.display = "none";
+            });
             if (document.getElementsByClassName("myHeader").length > 0){
                 if (!e.target.matches('.dropbtn')) {
                     var myDropdown = document.getElementById("myDropdown");
