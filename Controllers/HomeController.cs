@@ -32,8 +32,9 @@ public class HomeController : Controller
             if (HttpContext.Session.GetString("Username") != null){
                 HttpContext.Session.SetString("AuthenticatedUser", "true");
                 DateTime date = DateTime.Now;
+                string month = date.ToString("MMMM");
                 string timeOfDay = date.TimeOfDay > new TimeSpan(11, 59, 00) ? "afternoon" : "morning";
-                ViewBag.Date = $"{date.DayOfWeek}, May {date.Day}";
+                ViewBag.Date = $"{date.DayOfWeek}, {month} {date.Day}";
                 ViewBag.Greeting = $"Good {timeOfDay}, {HttpContext.Session.GetString("FirstName")}";
                 ViewBag.PendingCount = _context.Issues.Count(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == Status.PENDING);
                 ViewBag.InProgressCount = _context.Issues.Count(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == Status.INPROGRESS);
