@@ -4,7 +4,7 @@
 
 # Dashboard
 <h3>Users can view list of all views or filter out by status</h3>
-<img src=./Content/assets/main.PNG>
+<img src=./Content/assets/main-interface.PNG>
 <h5>Individual rows can be selected to view/edit the issue</h5>
 <img src=./Content/assets/id-row-selection.PNG>
 
@@ -18,4 +18,4 @@
 
 # My Issues
 <h3>Users can view their own assigned issues</h3>
-<img src=./Content/assets/myissues.PNG>
+<img src=./Content/assets/my-issues.PNG>
