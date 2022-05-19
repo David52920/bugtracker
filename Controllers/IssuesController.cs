@@ -208,7 +208,7 @@ namespace bugtracker.Controllers
 
         private void CheckStatus(ref Issue issue){
             if (issue != null){
-                if (issue.Status == Status.Completed){
+                if (issue.Status == Status.COMPLETED){
                     issue.CompletedBy = HttpContext.Session.GetString("Username");
                 }else{
                     issue.CompletedBy = "";

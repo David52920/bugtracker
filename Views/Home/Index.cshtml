@@ -6,9 +6,9 @@
 <h2 class="Typography--textAlignCenter"> @ViewBag.Greeting </h2>
 <div class=Achievement-Widget>
     <div class="issuesStatus">
-        <span class="issueCountNum">@ViewBag.PendingCount</span> Pending | 
-        <span class="issueCountNum">@ViewBag.InProgressCount</span> In Progress |
-        <span class="issueCountNum" >@ViewBag.CompletedCount</span> Completed
+        <span class="issueCountNum">@ViewBag.PendingCount</span><span>PENDING |</span>
+        <span class="issueCountNum">@ViewBag.InProgressCount</span><span>IN PROGRESS |</span>
+        <span class="issueCountNum" >@ViewBag.CompletedCount</span><span>COMPLETED</span>
     </div>
 </div>
 
@@ -16,7 +16,7 @@
     <div class="Widget MyIssues-Widget Card">
         <div class="Widget-Header">
             <h4 class="MyIssues-Widget-Title">My Issues</h4>
-            @Html.DropDownList("MyStatus", new SelectList(new List<string>{ "All", "Pending", "In Progress", "Completed" }), null, new { @class = "btn btn-primary dropdown-toggle" })
+            @Html.DropDownList("MyStatus", new SelectList(new List<string>{ "ALL", "PENDING", "IN PROGRESS", "COMPLETED" }), null, new { @class = "btn btn-primary dropdown-toggle" })
         </div>
         <div id="My-Content" class="MyIssues-Content"> 
             @await Component.InvokeAsync("MyIssues")
@@ -25,7 +25,7 @@
     <div class=" Widget AllIssues-Widget Card"> 
         <div class="Widget-Header">
             <h4 class="AllIssues-Widget-Title">All Issues</h4>
-            @Html.DropDownList("AllStatus", new SelectList(new List<string>{ "All", "Pending", "In Progress", "Completed" }), null, new { @class = "btn btn-primary dropdown-toggle" })
+            @Html.DropDownList("AllStatus", new SelectList(new List<string>{ "ALL", "PENDING", "IN PROGRESS", "COMPLETED" }), null, new { @class = "btn btn-primary dropdown-toggle" })
         </div>
         <div id="All-Content" class="AllIssues-Content"> 
             @await Component.InvokeAsync("AllIssues")

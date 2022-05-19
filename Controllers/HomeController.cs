@@ -35,9 +35,9 @@ public class HomeController : Controller
                 string timeOfDay = date.TimeOfDay > new TimeSpan(11, 59, 00) ? "afternoon" : "morning";
                 ViewBag.Date = $"{date.DayOfWeek}, May {date.Day}";
                 ViewBag.Greeting = $"Good {timeOfDay}, {HttpContext.Session.GetString("FirstName")}";
-                ViewBag.PendingCount = _context.Issues.Count(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == Status.Pending);
-                ViewBag.InProgressCount = _context.Issues.Count(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == Status.InProgress);
-                ViewBag.CompletedCount = _context.Issues.Count(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == Status.Completed);
+                ViewBag.PendingCount = _context.Issues.Count(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == Status.PENDING);
+                ViewBag.InProgressCount = _context.Issues.Count(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == Status.INPROGRESS);
+                ViewBag.CompletedCount = _context.Issues.Count(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == Status.COMPLETED);
                 return View();
             }else{
                 return RedirectToAction("Login");

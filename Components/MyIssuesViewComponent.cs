@@ -21,21 +21,21 @@ public class MyIssuesViewComponent : ViewComponent
     public async Task<IViewComponentResult> InvokeAsync(string status)
     {
         if (status == null){
-            status = "All";
+            status = "ALL";
         }
-        var currentStatus = Status.Pending;
+        var currentStatus = Status.PENDING;
         switch(status){
-            case "Pending":
-                currentStatus = Status.Pending;
+            case "PENDING":
+                currentStatus = Status.PENDING;
                 break;
-            case "In Progress":
-                currentStatus = Status.InProgress;
+            case "IN PROGRESS":
+                currentStatus = Status.INPROGRESS;
                 break;
-            case "Completed":
-                currentStatus = Status.Completed;
+            case "COMPLETED":
+                currentStatus = Status.COMPLETED;
                 break;
         }
-        return status == "All" ? View(await _context.Issues.Where(issue => issue.Assigned == HttpContext.Session.GetString("Username")).ToListAsync()) : 
+        return status == "ALL" ? View(await _context.Issues.Where(issue => issue.Assigned == HttpContext.Session.GetString("Username")).ToListAsync()) : 
                                 View(await _context.Issues.Where(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == currentStatus).ToListAsync());
     }
     
