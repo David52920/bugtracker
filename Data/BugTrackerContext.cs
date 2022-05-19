@@ -11,7 +11,6 @@ using bugtracker.Models;
             : base(options)
         {
         }
-
         public DbSet<bugtracker.Models.Issue>? Issues { get; set; }
         public DbSet<bugtracker.Models.User>? Users { get; set; }
     }

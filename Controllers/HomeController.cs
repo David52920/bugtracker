@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using bugtracker.Enums;
 using bugtracker.Models;
 
 namespace bugtracker.Controllers;
@@ -32,14 +33,11 @@ public class HomeController : Controller
                 HttpContext.Session.SetString("AuthenticatedUser", "true");
                 DateTime date = DateTime.Now;
                 string timeOfDay = date.TimeOfDay > new TimeSpan(11, 59, 00) ? "afternoon" : "morning";
-                ViewBag.activeStatus = "Pending";
                 ViewBag.Date = $"{date.DayOfWeek}, May {date.Day}";
                 ViewBag.Greeting = $"Good {timeOfDay}, {HttpContext.Session.GetString("FirstName")}";
-                ViewBag.PendingCount = _context.Issues.Count(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == "Pending");
-                ViewBag.InProgressCount = _context.Issues.Count(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == "In Progress");
-                ViewBag.CompletedCount = _context.Issues.Count(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == "Completed");
-                List<string> optionList = new List<string>{ "All", "Pending", "In Progress", "Completed" };
-                ViewBag.status = new SelectList(optionList);
+                ViewBag.PendingCount = _context.Issues.Count(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == Status.Pending);
+                ViewBag.InProgressCount = _context.Issues.Count(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == Status.InProgress);
+                ViewBag.CompletedCount = _context.Issues.Count(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == Status.Completed);
                 return View();
             }else{
                 return RedirectToAction("Login");
@@ -99,21 +97,23 @@ public class HomeController : Controller
         if (ModelState.IsValid)
         {
             var f_password = GetMD5(password);
+            if (_context != null){
             var data =_context.Users.Where(s => s.Username.Equals(username) && s.Password.Equals(f_password)).ToList();
-            if (data.Count() > 0)
-            {
-                HttpContext.Session.SetString("FullName", data.FirstOrDefault().FirstName +" "+ data.FirstOrDefault().LastName);
-                HttpContext.Session.SetString("FirstName", data.FirstOrDefault().FirstName);
-                HttpContext.Session.SetString("Email", data.FirstOrDefault().Email);
-                HttpContext.Session.SetString("Username", data.FirstOrDefault().Username);
-                HttpContext.Session.SetString("FirstLast", data.FirstOrDefault().FirstName.Substring(0, 1) + data.FirstOrDefault().LastName.Substring(0, 1));
-                HttpContext.Session.SetString("UserID", data.FirstOrDefault().Id.ToString());
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                ViewBag.error = "Login failed";
-                return RedirectToAction("Login");
+                if (data.Count() > 0)
+                {
+                    HttpContext.Session.SetString("FullName", data.FirstOrDefault().FirstName +" "+ data.FirstOrDefault().LastName);
+                    HttpContext.Session.SetString("FirstName", data.FirstOrDefault().FirstName);
+                    HttpContext.Session.SetString("Email", data.FirstOrDefault().Email);
+                    HttpContext.Session.SetString("Username", data.FirstOrDefault().Username);
+                    HttpContext.Session.SetString("FirstLast", data.FirstOrDefault().FirstName.Substring(0, 1) + data.FirstOrDefault().LastName.Substring(0, 1));
+                    HttpContext.Session.SetString("UserID", data.FirstOrDefault().Id.ToString());
+                    return RedirectToAction("Index");
+                }
+                else
+                {
+                    ViewBag.error = "Login failed";
+                    return RedirectToAction("Login");
+                }
             }
         }
         return View();
@@ -126,12 +126,12 @@ public class HomeController : Controller
         return RedirectToAction("Login");
     }
 
-    public static string GetMD5(string str)
+    public static string? GetMD5(string str)
     {
         MD5 md5 = new MD5CryptoServiceProvider();
         byte[] fromData = Encoding.UTF8.GetBytes(str);
         byte[] targetData = md5.ComputeHash(fromData);
-        string byte2String = null;
+        string? byte2String = null;
 
         for (int i = 0; i < targetData.Length; i++)
         {

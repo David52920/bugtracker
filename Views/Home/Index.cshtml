@@ -16,7 +16,7 @@
     <div class="Widget MyIssues-Widget Card">
         <div class="Widget-Header">
             <h4 class="MyIssues-Widget-Title">My Issues</h4>
-            @Html.DropDownList("MyStatus", (SelectList)ViewBag.status, null, new { @class = "btn btn-primary dropdown-toggle" })
+            @Html.DropDownList("MyStatus", new SelectList(new List<string>{ "All", "Pending", "In Progress", "Completed" }), null, new { @class = "btn btn-primary dropdown-toggle" })
         </div>
         <div id="My-Content" class="MyIssues-Content"> 
             @await Component.InvokeAsync("MyIssues")
@@ -25,7 +25,7 @@
     <div class=" Widget AllIssues-Widget Card"> 
         <div class="Widget-Header">
             <h4 class="AllIssues-Widget-Title">All Issues</h4>
-            @Html.DropDownList("AllStatus", (SelectList)ViewBag.status, null, new { @class = "btn btn-primary dropdown-toggle" })
+            @Html.DropDownList("AllStatus", new SelectList(new List<string>{ "All", "Pending", "In Progress", "Completed" }), null, new { @class = "btn btn-primary dropdown-toggle" })
         </div>
         <div id="All-Content" class="AllIssues-Content"> 
             @await Component.InvokeAsync("AllIssues")
@@ -80,7 +80,7 @@
     function Edit(id) {
         $.get("@Url.Action("Edit","Issues")/" + id,
             function (data) {
-                $('.modal-data').html($("#EditView", data));
+                $('.modal-data').html($("#EditView", data).html().replace('Issues/Edit/', 'Issues/EditModal/')); //workaround for modal 
             });
         $("#back-list-button").css("display", "none");
         modal.style.display = "block";

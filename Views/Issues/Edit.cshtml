@@ -1,4 +1,5 @@
 @model bugtracker.Models.Issue
+@using bugtracker.Enums
 
 @{
     ViewData["Title"] = "Edit";
@@ -9,7 +10,7 @@
     <hr />
     <div class="row">
         <div class="col-md-4">
-            <form asp-action="Edit">
+            <form id="EditForm" asp-action="Edit">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
                 <input type="hidden" asp-for="Id" />
                 <div class="form-group">
@@ -17,18 +18,9 @@
                     <input asp-for="Name" class="form-control" />
                     <span asp-validation-for="Name" class="text-danger"></span>
                 </div>
-                <div class="form-group issue-description">
-                    <label class="control-label">Description:</label>
-                    <textarea  asp-for="Description" class="form-control issue-description-input"> </textarea>
-                    <span asp-validation-for="Description" class="text-danger"></span>
-                </div>
                 <div class="form-group">
                     <label class="control-label">Priority:</label>
-                    <select asp-for="Priority" class="form-control">
-                        <option value="LOW">Low</option>
-                        <option value="MEDIUM">Medium</option>
-                        <option value="HIGH">High</option>
-                    </select>
+                    @Html.DropDownListFor(n => n.Priority, Html.GetEnumSelectList<Priority>())
                     <span asp-validation-for="Priority" class="text-danger"></span>
                 </div>
                 <div class="form-group">
@@ -38,18 +30,23 @@
                 </div>
                 <div class="form-group">
                     <label class="control-label">Type:</label>
-                    <input asp-for="Type" class="form-control" />
+                    @Html.DropDownListFor(n => n.Type, Html.GetEnumSelectList<IssueType>())
                     <span asp-validation-for="Type" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Status:</label>
-                    <input asp-for="Status" class="form-control" />
+                    @Html.DropDownListFor(n => n.Status, Html.GetEnumSelectList<Status>())
                     <span asp-validation-for="Status" class="text-danger"></span>
                 </div>
                 <div class="form-group">
-                    <label class="control-label">Assigned:</label>
-                    <input asp-for="Assigned" class="form-control"/>
+                    <label class="control-label">Assign To:</label>
+                    @Html.DropDownListFor(n => n.Assigned, new SelectList(Model.Users), "")
                     <span asp-validation-for="Assigned" class="text-danger"></span>
+                </div>
+                <div class="form-group issue-description">
+                    <label class="control-label">Description:</label>
+                    <textarea  asp-for="Description" class="form-control issue-description-input"> </textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
                 </div>
                 <div class="form-group">
                     <label class="control-label">Completed By:</label>

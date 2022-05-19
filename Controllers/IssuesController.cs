@@ -1,10 +1,12 @@
 using System;
+using System.Web;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using bugtracker.Enums;
 using bugtracker.Models;
 
 namespace bugtracker.Controllers
@@ -16,14 +18,17 @@ namespace bugtracker.Controllers
         public IssuesController(BugTrackerContext context)
         {
             _context = context;
+            
         }
 
         // GET: Issues
         public async Task<IActionResult> Index()
         {
-              return _context.Issues != null ? 
-                          View(await _context.Issues.Where(issue => issue.Assigned == HttpContext.Session.GetString("Username")).ToListAsync()) :
-                          Problem("Entity set 'BugTrackerContext.Issues'  is null.");
+            if (_context.Issues != null) {
+                return View(await _context.Issues.Where(issue => issue.Assigned == HttpContext.Session.GetString("Username")).ToListAsync());
+            }else{
+                return Problem("Entity set 'BugTrackerContext.Issues'  is null.");
+            }
         }
 
         // GET: Issues/Details/5
@@ -47,7 +52,13 @@ namespace bugtracker.Controllers
         // GET: Issues/Create
         public IActionResult Create()
         {
-            return View();
+            if ( _context.Users == null)
+            {
+                return NotFound();
+            }
+            var issue = new Issue();
+            issue.Users = _context.Users.Select(u => u.Username).ToList();
+            return View(issue);
         }
 
         // POST: Issues/Create
@@ -55,10 +66,10 @@ namespace bugtracker.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,Description,Priority,DueDate,Type")] Issue issue)
+        public async Task<IActionResult> Create([Bind("Id,Name,Description,Priority,DueDate,Assigned,Type")] Issue issue)
         {
-            issue.StartedBy = HttpContext.Session.GetString("Username");
-            issue.Status = "Pending";
+            issue.CreatedBy = HttpContext.Session.GetString("Username");
+            ModelState.Remove("Users");
             if (ModelState.IsValid)
             {
                 _context.Add(issue);
@@ -77,6 +88,8 @@ namespace bugtracker.Controllers
             }
 
             var issue = await _context.Issues.FindAsync(id);
+
+            issue.Users = _context.Users.Select(u => u.Username).ToList();
             if (issue == null)
             {
                 return NotFound();
@@ -85,21 +98,20 @@ namespace bugtracker.Controllers
         }
 
         // POST: Issues/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Priority,DueDate,Type,Status,StartedBy,CompletedBy")] Issue issue)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Priority,DueDate,Type,Status,CreatedBy,CompletedBy,Assigned")] Issue issue)
         {
             if (id != issue.Id)
             {
                 return NotFound();
             }
-
+            ModelState.Remove("Users");
             if (ModelState.IsValid)
             {
                 try
                 {
+                    CheckStatus(ref issue);
                     _context.Update(issue);
                     await _context.SaveChangesAsync();
                 }
@@ -115,6 +127,39 @@ namespace bugtracker.Controllers
                     }
                 }
                 return RedirectToAction(nameof(Index));
+            }
+            return View(issue);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditModal(int id, [Bind("Id,Name,Description,Priority,DueDate,Type,Status,CreatedBy,CompletedBy,Assigned")] Issue issue)
+        {
+            if (id != issue.Id)
+            {
+                return NotFound();
+            }
+            ModelState.Remove("Users");
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    CheckStatus(ref issue);
+                    _context.Update(issue);
+                    await _context.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    if (!IssueExists(issue.Id))
+                    {
+                        return NotFound();
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                }
+                return RedirectToAction("Index", "Home");
             }
             return View(issue);
         }
@@ -159,6 +204,16 @@ namespace bugtracker.Controllers
         private bool IssueExists(int id)
         {
           return (_context.Issues?.Any(e => e.Id == id)).GetValueOrDefault();
+        }
+
+        private void CheckStatus(ref Issue issue){
+            if (issue != null){
+                if (issue.Status == Status.Completed){
+                    issue.CompletedBy = HttpContext.Session.GetString("Username");
+                }else{
+                    issue.CompletedBy = "";
+                }
+            }
         }
     }
 }
