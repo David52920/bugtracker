@@ -10,8 +10,7 @@
     <link href="~/css/site.css" rel="stylesheet" type="text/css" asp-append-version="true" />
 </head>
 <body>
-    @using Microsoft.AspNetCore.Http
-    @if (Context.Session.GetString("AuthenticatedUser") == "true")
+    @if (User.Identity.IsAuthenticated)
     {
         <header id="main" class="myHeader">
             <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light border-bottom box-shadow mb-3">
@@ -23,8 +22,8 @@
                                 @($"{Context.Session.GetString("FirstLast")}")
                             </button>
                             <div class="dropdown-content" id="myDropdown">
-                                <a asp-area="" asp-controller="Home" asp-action="Logout">Settings</a>
-                                <a asp-area="" asp-controller="Home" asp-action="Logout">Logout</a>
+                                <a asp-area="" asp-controller="Account" asp-action="Logout">Settings</a>
+                                <a asp-area="" asp-controller="Account" asp-action="Logout">Logout</a>
                             </div>
                         </div>
                     </div>

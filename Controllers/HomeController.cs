@@ -4,9 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using AspNetCoreHero.ToastNotification.Abstractions;
@@ -28,126 +30,29 @@ public class HomeController : Controller
         _notifyService = notifyService;
     }
 
-    // GET: Issues
-    public async Task<IActionResult> Index()
+    [Authorize]
+    public IActionResult Index()
     {
         if (_context != null){
-            if (HttpContext.Session.GetString("Username") != null){
-                HttpContext.Session.SetString("AuthenticatedUser", "true");
-                DateTime date = DateTime.Now;
-                string month = date.ToString("MMMM");
-                string timeOfDay = date.TimeOfDay > new TimeSpan(11, 59, 00) ? "afternoon" : "morning";
-                ViewBag.Date = $"{date.DayOfWeek}, {month} {date.Day}";
-                ViewBag.Greeting = $"Good {timeOfDay}, {HttpContext.Session.GetString("FirstName")}";
-                ViewBag.PendingCount = _context.Issues.Count(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == Status.PENDING);
-                ViewBag.InProgressCount = _context.Issues.Count(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == Status.INPROGRESS);
-                ViewBag.CompletedCount = _context.Issues.Count(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == Status.COMPLETED);
-                return View();
-            }else{
-                return RedirectToAction("Login");
-            }
-        }else{
-            return Problem();
-        }
-    }
-
-    public ActionResult Register()
-    {
-        return View();
-    }
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public IActionResult Register(User _user)
-    {
-        if (ModelState.IsValid)
-        {
-            var check = _context.Users.FirstOrDefault(s => s.Username == _user.Username || s.Email == _user.Email);
-            if (check == null)
-            {
-                _user.Password = GetMD5(_user.Password);
-                _context.Users.Add(_user);
-                _context.SaveChanges();
-                _notifyService.Success("Successfully Registered.");
-                return RedirectToAction("Index");
-            }
-            else
-            {
-                ViewBag.error = "Email already exists";
-                return View();
-            }
+            var userId = this.User.FindFirstValue("FirstName");
+            System.Console.WriteLine(userId);
+            DateTime date = DateTime.Now;
+            string month = date.ToString("MMMM");
+            string timeOfDay = date.TimeOfDay > new TimeSpan(11, 59, 00) ? "afternoon" : "morning";
+            ViewBag.Date = $"{date.DayOfWeek}, {month} {date.Day}";
+            ViewBag.Greeting = $"Good {timeOfDay}, {HttpContext.Session.GetString("FirstName")}";
+            ViewBag.PendingCount = _context.Issues.Count(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == Status.PENDING);
+            ViewBag.InProgressCount = _context.Issues.Count(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == Status.INPROGRESS);
+            ViewBag.CompletedCount = _context.Issues.Count(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == Status.COMPLETED);
         }
         return View();
     }
 
-    public ActionResult Login()
+    public IActionResult Privacy()
     {
         return View();
     }
 
-    [HttpPost]
-    public IActionResult ReloadAll(string status){
-        return ViewComponent("AllIssues", status);
-    }
-
-    [HttpPost]
-    public IActionResult ReloadMy(string status){
-        return ViewComponent("MyIssues", status);
-    }
-
-    [HttpPost]
-    [ValidateAntiForgeryToken]
-    public ActionResult Login(string username,string password)
-    {
-        if (ModelState.IsValid)
-        {
-            var f_password = GetMD5(password);
-            if (_context != null){
-            var data =_context.Users.Where(s => s.Username.Equals(username) && s.Password.Equals(f_password)).ToList();
-                if (data.Count() > 0)
-                {
-                    HttpContext.Session.SetString("FullName", data.FirstOrDefault().FirstName +" "+ data.FirstOrDefault().LastName);
-                    HttpContext.Session.SetString("FirstName", data.FirstOrDefault().FirstName);
-                    HttpContext.Session.SetString("Email", data.FirstOrDefault().Email);
-                    HttpContext.Session.SetString("Username", data.FirstOrDefault().Username);
-                    HttpContext.Session.SetString("FirstLast", data.FirstOrDefault().FirstName.Substring(0, 1) + data.FirstOrDefault().LastName.Substring(0, 1));
-                    HttpContext.Session.SetString("UserID", data.FirstOrDefault().Id.ToString());
-                    _notifyService.Success("Login Successful.");
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    ViewBag.error = "Login failed";
-                    return RedirectToAction("Login");
-                }
-            }
-        }
-        return View();
-    }
-
-    public ActionResult Logout()
-    {
-        HttpContext.Session.SetString("AuthenticatedUser", "false");
-        HttpContext.Session.Clear();
-        return RedirectToAction("Login");
-    }
-
-    public static string? GetMD5(string str)
-    {
-        MD5 md5 = new MD5CryptoServiceProvider();
-        byte[] fromData = Encoding.UTF8.GetBytes(str);
-        byte[] targetData = md5.ComputeHash(fromData);
-        string? byte2String = null;
-
-        for (int i = 0; i < targetData.Length; i++)
-        {
-            byte2String += targetData[i].ToString("x2");
-
-        }
-        return byte2String;
-    }
-
-        
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {

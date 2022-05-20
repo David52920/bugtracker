@@ -59,7 +59,7 @@ namespace bugtracker.Controllers
                 return NotFound();
             }
             var issue = new Issue();
-            issue.Users = _context.Users.Select(u => u.Username).ToList();
+            issue.Users = _context.Users.Select(u => u.UserName).ToList();
             issue.DueDate = DateTime.Now;
             return View(issue);
         }
@@ -93,7 +93,7 @@ namespace bugtracker.Controllers
 
             var issue = await _context.Issues.FindAsync(id);
 
-            issue.Users = _context.Users.Select(u => u.Username).ToList();
+            issue.Users = _context.Users.Select(u => u.UserName).ToList();
             if (issue == null)
             {
                 return NotFound();

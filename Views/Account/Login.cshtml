@@ -1,0 +1,44 @@
+﻿@model bugtracker.Models.LoginViewModel
+
+@{
+    ViewBag.Title = "Login";
+}
+<div class="row justify-content-md-center container-centered">
+    <div class="col-md-4">
+        <div class="login card">
+            <div class="card-header">
+                BugTracker Login
+            </div>
+            <div class="card-body">
+                <div class="login-form">
+                    @using (Html.BeginForm("Login", "Account", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.UserName)
+                            @Html.TextBoxFor(m => m.UserName, "", new { @class = "form-control", @placeholder = "Username" })
+                        </div>
+                        <div class="form-group">
+                            <label asp-for="Password"></label>
+                            <input asp-for="Password" class="form-control" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                                <input asp-for="RememberMe" type="checkbox" class="custom-control-input">
+                                <label class="custom-control-label" asp-for="RememberMe">@Html.DisplayNameFor(m => m.RememberMe)</label>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <input type="submit" name="submit" class="btn btn-primary" value="Login"/>
+                            <a asp-controller="Account" asp-action="Register">
+                                <input class="btn btn-primary" type="button" value="Register" />
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
