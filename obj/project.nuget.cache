@@ -1,9 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "uZTmgugbMWoc7ilr13kvZ3qC6FNOFFRDCgJCIoPT1+H2NlEt0hSxnqaxarZyraxvBEvrZ7AuGMfMLedeoBQqEA==",
+  "dgSpecHash": "/jqx5tamjI4IN/RkC/Xhj1QXXwdpJRCKd5zAZDB9zoY2U278k2YCsaeRs3iZoqtjwQudk6/QWr/GU6Rh5aQ2Ww==",
   "success": true,
   "projectFilePath": "C:\\Workspace\\git\\bugtracker\\bugtracker.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\drees\\.nuget\\packages\\aspnetcorehero.toastnotification\\1.1.0\\aspnetcorehero.toastnotification.1.1.0.nupkg.sha512",
     "C:\\Users\\drees\\.nuget\\packages\\humanizer.core\\2.8.26\\humanizer.core.2.8.26.nupkg.sha512",
     "C:\\Users\\drees\\.nuget\\packages\\messagepack\\2.1.152\\messagepack.2.1.152.nupkg.sha512",
     "C:\\Users\\drees\\.nuget\\packages\\messagepack.annotations\\2.1.152\\messagepack.annotations.2.1.152.nupkg.sha512",

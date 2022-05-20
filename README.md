@@ -19,3 +19,7 @@
 # My Issues
 <h3>Users can view their own assigned issues</h3>
 <img src=./Content/assets/my-issues.PNG>
+
+# Popup notifications
+<h3>Notifications appear when user does certain actions ie. Login, Register, Edit, Create</h3>
+<img src=./Content/assets/notifications.PNG>

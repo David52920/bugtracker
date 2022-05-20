@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using AspNetCoreHero.ToastNotification.Abstractions;
 using bugtracker.Enums;
 using bugtracker.Models;
 
@@ -14,11 +15,12 @@ namespace bugtracker.Controllers
     public class IssuesController : Controller
     {
         private readonly BugTrackerContext _context;
+        private readonly INotyfService _notifyService;
 
-        public IssuesController(BugTrackerContext context)
+        public IssuesController(BugTrackerContext context, INotyfService notifyService)
         {
             _context = context;
-            
+            _notifyService = notifyService;
         }
 
         // GET: Issues
@@ -58,6 +60,7 @@ namespace bugtracker.Controllers
             }
             var issue = new Issue();
             issue.Users = _context.Users.Select(u => u.Username).ToList();
+            issue.DueDate = DateTime.Now;
             return View(issue);
         }
 
@@ -74,6 +77,7 @@ namespace bugtracker.Controllers
             {
                 _context.Add(issue);
                 await _context.SaveChangesAsync();
+                _notifyService.Success("Created Issue, ID: " + issue.Id);
                 return RedirectToAction(nameof(Index));
             }
             return View(issue);
@@ -126,6 +130,7 @@ namespace bugtracker.Controllers
                         throw;
                     }
                 }
+                _notifyService.Success("Edited Issue, ID: " + issue.Id);
                 return RedirectToAction(nameof(Index));
             }
             return View(issue);
@@ -159,6 +164,7 @@ namespace bugtracker.Controllers
                         throw;
                     }
                 }
+                _notifyService.Success("Edited Issue, ID: " + issue.Id);
                 return RedirectToAction("Index", "Home");
             }
             return View(issue);
@@ -198,6 +204,7 @@ namespace bugtracker.Controllers
             }
             
             await _context.SaveChangesAsync();
+            _notifyService.Success("Deleted Issue, ID: " + issue.Id);
             return RedirectToAction(nameof(Index));
         }
 

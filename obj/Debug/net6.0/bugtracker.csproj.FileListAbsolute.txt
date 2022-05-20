@@ -289,3 +289,6 @@ C:\Workspace\git\bugtracker\bin\Debug\net6.0\System.Web.WebPages.Deployment.dll
 C:\Workspace\git\bugtracker\bin\Debug\net6.0\System.Web.WebPages.Razor.dll
 C:\Workspace\git\bugtracker\bin\Debug\net6.0\System.Web.WebPages.dll
 C:\Workspace\git\bugtracker\bin\Debug\net6.0\Microsoft.Web.Infrastructure.dll
+C:\Workspace\git\bugtracker\obj\Debug\net6.0\bugtracker.MvcApplicationPartsAssemblyInfo.cs
+C:\Workspace\git\bugtracker\bin\Debug\net6.0\AspNetCoreHero.ToastNotification.Views.dll
+C:\Workspace\git\bugtracker\bin\Debug\net6.0\AspNetCoreHero.ToastNotification.dll

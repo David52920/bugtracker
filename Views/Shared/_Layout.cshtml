@@ -34,6 +34,7 @@
         <div id="mySidenav" class="sidenav">
             <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
+            <a class="nav-link text-dark" asp-area="" asp-controller="Issues" asp-action="Create">Create Issue</a>
             <a class="nav-link text-dark" asp-area="" asp-controller="Issues" asp-action="Index">My Issues</a>
         </div>
     }
@@ -49,6 +50,7 @@
         </div>
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    @await Component.InvokeAsync("Notyf")
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script>

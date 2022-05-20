@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using AspNetCoreHero.ToastNotification.Abstractions;
 using bugtracker.Enums;
 using bugtracker.Models;
 
@@ -18,11 +19,13 @@ public class HomeController : Controller
 {
     private readonly ILogger<HomeController> _logger;
     private readonly BugTrackerContext _context;
+    private readonly INotyfService _notifyService;
 
-    public HomeController(ILogger<HomeController> logger, BugTrackerContext context)
+    public HomeController(ILogger<HomeController> logger, BugTrackerContext context, INotyfService notifyService)
     {
         _logger = logger;
         _context = context;
+        _notifyService = notifyService;
     }
 
     // GET: Issues
@@ -65,6 +68,7 @@ public class HomeController : Controller
                 _user.Password = GetMD5(_user.Password);
                 _context.Users.Add(_user);
                 _context.SaveChanges();
+                _notifyService.Success("Successfully Registered.");
                 return RedirectToAction("Index");
             }
             else
@@ -108,6 +112,7 @@ public class HomeController : Controller
                     HttpContext.Session.SetString("Username", data.FirstOrDefault().Username);
                     HttpContext.Session.SetString("FirstLast", data.FirstOrDefault().FirstName.Substring(0, 1) + data.FirstOrDefault().LastName.Substring(0, 1));
                     HttpContext.Session.SetString("UserID", data.FirstOrDefault().Id.ToString());
+                    _notifyService.Success("Login Successful.");
                     return RedirectToAction("Index");
                 }
                 else
