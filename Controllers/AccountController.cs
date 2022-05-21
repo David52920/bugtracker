@@ -65,7 +65,6 @@ public class AccountController : Controller
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(user, isPersistent: false);
-
                 return RedirectToAction("index", "Home");
             }
 
@@ -96,7 +95,6 @@ public class AccountController : Controller
 
             if (result.Succeeded)
             {
-                HttpContext.Session.SetString("Username", user.UserName);
                  _notifyService.Success("Successfully logged in.");
                 return RedirectToAction("Index", "Home");
             }

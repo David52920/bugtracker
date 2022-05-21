@@ -34,16 +34,15 @@ public class HomeController : Controller
     public IActionResult Index()
     {
         if (_context != null){
-            var userId = this.User.FindFirstValue("FirstName");
-            System.Console.WriteLine(userId);
+            var userId = this.User.FindFirstValue("UserName");
             DateTime date = DateTime.Now;
             string month = date.ToString("MMMM");
             string timeOfDay = date.TimeOfDay > new TimeSpan(11, 59, 00) ? "afternoon" : "morning";
             ViewBag.Date = $"{date.DayOfWeek}, {month} {date.Day}";
-            ViewBag.Greeting = $"Good {timeOfDay}, {HttpContext.Session.GetString("FirstName")}";
-            ViewBag.PendingCount = _context.Issues.Count(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == Status.PENDING);
-            ViewBag.InProgressCount = _context.Issues.Count(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == Status.INPROGRESS);
-            ViewBag.CompletedCount = _context.Issues.Count(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == Status.COMPLETED);
+            ViewBag.Greeting = $"Good {timeOfDay}, {User.FindFirstValue("FirstName")}";
+            ViewBag.PendingCount = _context.Issues.Count(issue => issue.Assigned == userId && issue.Status == Status.PENDING);
+            ViewBag.InProgressCount = _context.Issues.Count(issue => issue.Assigned == userId && issue.Status == Status.INPROGRESS);
+            ViewBag.CompletedCount = _context.Issues.Count(issue => issue.Assigned == userId && issue.Status == Status.COMPLETED);
         }
         return View();
     }
@@ -53,6 +52,16 @@ public class HomeController : Controller
         return View();
     }
 
+    [HttpPost]
+    public IActionResult ReloadAll(string status){
+        return ViewComponent("AllIssues", status);
+    }
+
+    [HttpPost]
+    public IActionResult ReloadMy(string status){
+        return ViewComponent("MyIssues", status);
+    }
+    
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     public IActionResult Error()
     {

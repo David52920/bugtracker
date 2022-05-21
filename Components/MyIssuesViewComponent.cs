@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Claims;
 using bugtracker.Models;
 using bugtracker.Enums;
 
@@ -35,8 +37,8 @@ public class MyIssuesViewComponent : ViewComponent
                 currentStatus = Status.COMPLETED;
                 break;
         }
-        return status == "ALL" ? View(await _context.Issues.Where(issue => issue.Assigned == HttpContext.Session.GetString("Username")).ToListAsync()) : 
-                                View(await _context.Issues.Where(issue => issue.Assigned == HttpContext.Session.GetString("Username") && issue.Status == currentStatus).ToListAsync());
+        return status == "ALL" ? View(await _context.Issues.Where(issue => issue.Assigned == HttpContext.User.FindFirstValue("UserName")).ToListAsync()) : 
+                                View(await _context.Issues.Where(issue => issue.Assigned == HttpContext.User.FindFirstValue("UserName") && issue.Status == currentStatus).ToListAsync());
     }
     
 }

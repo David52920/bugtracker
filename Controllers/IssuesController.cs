@@ -3,8 +3,10 @@ using System.Web;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using bugtracker.Enums;
@@ -16,18 +18,20 @@ namespace bugtracker.Controllers
     {
         private readonly BugTrackerContext _context;
         private readonly INotyfService _notifyService;
+        private readonly UserManager<ApplicationUser> _userManager;
 
-        public IssuesController(BugTrackerContext context, INotyfService notifyService)
+        public IssuesController(BugTrackerContext context, INotyfService notifyService, UserManager<ApplicationUser> userManager)
         {
             _context = context;
             _notifyService = notifyService;
+            _userManager = userManager;
         }
 
         // GET: Issues
         public async Task<IActionResult> Index()
         {
             if (_context.Issues != null) {
-                return View(await _context.Issues.Where(issue => issue.Assigned == HttpContext.Session.GetString("Username")).ToListAsync());
+                return View(await _context.Issues.Where(issue => issue.Assigned == User.FindFirstValue("UserName")).ToListAsync());
             }else{
                 return Problem("Entity set 'BugTrackerContext.Issues'  is null.");
             }
@@ -54,13 +58,15 @@ namespace bugtracker.Controllers
         // GET: Issues/Create
         public IActionResult Create()
         {
-            if ( _context.Users == null)
+            if ( _context == null)
             {
                 return NotFound();
             }
-            var issue = new Issue();
-            issue.Users = _context.Users.Select(u => u.UserName).ToList();
-            issue.DueDate = DateTime.Now;
+            var issue = new Issue(){
+                Users =(from u in _userManager.Users select u.UserName).ToList(),
+                DueDate=  DateTime.Now
+            };
+
             return View(issue);
         }
 
@@ -71,7 +77,7 @@ namespace bugtracker.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,Name,Description,Priority,DueDate,Assigned,Type")] Issue issue)
         {
-            issue.CreatedBy = HttpContext.Session.GetString("Username");
+            issue.CreatedBy = User.FindFirstValue("UserName");
             ModelState.Remove("Users");
             if (ModelState.IsValid)
             {
@@ -93,7 +99,7 @@ namespace bugtracker.Controllers
 
             var issue = await _context.Issues.FindAsync(id);
 
-            issue.Users = _context.Users.Select(u => u.UserName).ToList();
+            issue.Users = (from u in _userManager.Users select u.UserName).ToList();
             if (issue == null)
             {
                 return NotFound();
@@ -216,7 +222,7 @@ namespace bugtracker.Controllers
         private void CheckStatus(ref Issue issue){
             if (issue != null){
                 if (issue.Status == Status.COMPLETED){
-                    issue.CompletedBy = HttpContext.Session.GetString("Username");
+                    issue.CompletedBy = User.FindFirstValue("UserName");
                 }else{
                     issue.CompletedBy = "";
                 }

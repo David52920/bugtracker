@@ -10,6 +10,7 @@
     <link href="~/css/site.css" rel="stylesheet" type="text/css" asp-append-version="true" />
 </head>
 <body>
+@using System.Security.Claims
     @if (User.Identity.IsAuthenticated)
     {
         <header id="main" class="myHeader">
@@ -19,7 +20,7 @@
                     <div class="nav navbar-right">
                         <div class="dropdown-link">
                             <button class="userButton dropbtn "userInital"" onclick="myFunction()">
-                                @($"{Context.Session.GetString("FirstLast")}")
+                                @($"{User.FindFirstValue("FirstName")[0]}{User.FindFirstValue("LastName")[0]}")
                             </button>
                             <div class="dropdown-content" id="myDropdown">
                                 <a asp-area="" asp-controller="Account" asp-action="Logout">Settings</a>
