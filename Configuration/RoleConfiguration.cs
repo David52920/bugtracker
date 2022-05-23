@@ -10,11 +10,6 @@ public class RoleConfiguration : IEntityTypeConfiguration<IdentityRole>
         builder.HasData(
         new IdentityRole
         {
-            Name = "Visitor",
-            NormalizedName = "VISITOR"
-        },
-        new IdentityRole
-        {
             Name = "Member",
             NormalizedName = "MEMBER"
         },

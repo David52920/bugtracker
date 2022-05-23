@@ -25,8 +25,10 @@ namespace bugtracker.Controllers
         [Authorize(Roles ="Administrator")]
         public ViewResult Index() => View(roleManager.Roles);
 
+        [Authorize(Roles ="Administrator")]
         public IActionResult Create() => View();
 
+        [Authorize(Roles ="Administrator")]
         [HttpPost]
         public async Task<IActionResult> Create([Required]string name)
         {
@@ -41,6 +43,7 @@ namespace bugtracker.Controllers
             return View(name);
         }
 
+        [Authorize(Roles ="Administrator")]
         [HttpPost]
         public async Task<IActionResult> Delete(string id)
         {
@@ -58,6 +61,7 @@ namespace bugtracker.Controllers
             return View("Index", roleManager.Roles);
         }
 
+        [Authorize(Roles ="Administrator")]
         public async Task<IActionResult> Update(string id)
         {
             IdentityRole role = await roleManager.FindByIdAsync(id);
@@ -75,7 +79,8 @@ namespace bugtracker.Controllers
                 NonMembers = nonMembers
             });
         }
-
+        
+        [Authorize(Roles ="Administrator")]
         [HttpPost]
         public async Task<IActionResult> Update(RoleModification model)
         {
