@@ -321,6 +321,11 @@ body {
   background-color: #0C7CFA;
 }
 
+.bg-info {
+  background-color: #0C7CFA !important;
+}
+
+
 .modal {
   display: none;
   position: fixed;

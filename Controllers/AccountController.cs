@@ -24,16 +24,19 @@ public class AccountController : Controller
     private readonly BugTrackerContext _context;
     private readonly INotyfService _notifyService;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly RoleManager<IdentityRole> _roleManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
 
     public AccountController(ILogger<AccountController> logger, BugTrackerContext context, 
-                            INotyfService notifyService, UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+                            INotyfService notifyService, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager,
+                            SignInManager<ApplicationUser> signInManager)
     {
         _logger = logger;
         _context = context;
         _notifyService = notifyService;
         _userManager = userManager;
         _signInManager = signInManager;
+        _roleManager = roleManager;
     }
 
     // GET: Issues
@@ -64,8 +67,13 @@ public class AccountController : Controller
 
             if (result.Succeeded)
             {
+                
                 await _signInManager.SignInAsync(user, isPersistent: false);
-                return RedirectToAction("index", "Home");
+                result = await _userManager.AddToRoleAsync(user, "Member");
+                if (result.Succeeded){
+                    _notifyService.Success("Successfully registered account.");
+                    return RedirectToAction("index", "Account");
+                }
             }
 
             foreach (var error in result.Errors)

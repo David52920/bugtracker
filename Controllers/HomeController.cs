@@ -33,18 +33,22 @@ public class HomeController : Controller
     [Authorize]
     public IActionResult Index()
     {
-        if (_context != null){
-            var userId = this.User.FindFirstValue("UserName");
-            DateTime date = DateTime.Now;
-            string month = date.ToString("MMMM");
-            string timeOfDay = date.TimeOfDay > new TimeSpan(11, 59, 00) ? "afternoon" : "morning";
-            ViewBag.Date = $"{date.DayOfWeek}, {month} {date.Day}";
-            ViewBag.Greeting = $"Good {timeOfDay}, {User.FindFirstValue("FirstName")}";
-            ViewBag.PendingCount = _context.Issues.Count(issue => issue.Assigned == userId && issue.Status == Status.PENDING);
-            ViewBag.InProgressCount = _context.Issues.Count(issue => issue.Assigned == userId && issue.Status == Status.INPROGRESS);
-            ViewBag.CompletedCount = _context.Issues.Count(issue => issue.Assigned == userId && issue.Status == Status.COMPLETED);
+        if (User.Identity.IsAuthenticated){
+            if (_context != null){
+                var userId = this.User.FindFirstValue("UserName");
+                DateTime date = DateTime.Now;
+                string month = date.ToString("MMMM");
+                string timeOfDay = date.TimeOfDay > new TimeSpan(11, 59, 00) ? "afternoon" : "morning";
+                ViewBag.Date = $"{date.DayOfWeek}, {month} {date.Day}";
+                ViewBag.Greeting = $"Good {timeOfDay}, {User.FindFirstValue("FirstName")}";
+                ViewBag.PendingCount = _context.Issues.Count(issue => issue.Assigned == userId && issue.Status == Status.PENDING);
+                ViewBag.InProgressCount = _context.Issues.Count(issue => issue.Assigned == userId && issue.Status == Status.INPROGRESS);
+                ViewBag.CompletedCount = _context.Issues.Count(issue => issue.Assigned == userId && issue.Status == Status.COMPLETED);
+            }
+            return View();
+        }else{
+            return RedirectToAction("Login", "Account");
         }
-        return View();
     }
 
     public IActionResult Privacy()

@@ -30,11 +30,8 @@ namespace bugtracker.Controllers
         // GET: Issues
         public async Task<IActionResult> Index()
         {
-            if (_context.Issues != null) {
-                return View(await _context.Issues.Where(issue => issue.Assigned == User.FindFirstValue("UserName")).ToListAsync());
-            }else{
-                return Problem("Entity set 'BugTrackerContext.Issues'  is null.");
-            }
+            return _context.Issues != null ? View(await _context.Issues.Where(issue => issue.Assigned == User.FindFirstValue("UserName")).ToListAsync()) :
+                Problem("Entity set 'BugTrackerContext.Issues'  is null.");
         }
 
         // GET: Issues/Details/5
@@ -45,8 +42,7 @@ namespace bugtracker.Controllers
                 return NotFound();
             }
 
-            var issue = await _context.Issues
-                .FirstOrDefaultAsync(m => m.Id == id);
+            var issue = await _context.Issues.FirstOrDefaultAsync(m => m.Id == id);
             if (issue == null)
             {
                 return NotFound();
@@ -63,7 +59,7 @@ namespace bugtracker.Controllers
                 return NotFound();
             }
             var issue = new Issue(){
-                Users =(from u in _userManager.Users select u.UserName).ToList(),
+                Users = (from u in _userManager.Users select u.UserName).ToList(),
                 DueDate=  DateTime.Now
             };
 
