@@ -48,7 +48,6 @@ namespace bugtracker
             services.ConfigureApplicationCookie(options =>
             {
                 options.LoginPath = "/Account/Login";
-                
             });
             services.AddControllersWithViews();
             services.AddDistributedMemoryCache();
