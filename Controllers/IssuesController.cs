@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 using AspNetCoreHero.ToastNotification.Abstractions;
 using bugtracker.Enums;
 using bugtracker.Models;
@@ -28,6 +29,7 @@ namespace bugtracker.Controllers
         }
 
         // GET: Issues
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             return _context.Issues != null ? View(await _context.Issues.Where(issue => issue.Assigned == User.FindFirstValue("UserName")).ToListAsync()) :
@@ -35,6 +37,7 @@ namespace bugtracker.Controllers
         }
 
         // GET: Issues/Details/5
+        [Authorize]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Issues == null)
@@ -52,6 +55,7 @@ namespace bugtracker.Controllers
         }
 
         // GET: Issues/Create
+        [Authorize]
         public IActionResult Create()
         {
             if ( _context == null)
@@ -69,6 +73,7 @@ namespace bugtracker.Controllers
         // POST: Issues/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Create([Bind("Id,Name,Description,Priority,DueDate,Assigned,Type")] Issue issue)
         {
             issue.CreatedBy = User.FindFirstValue("UserName");
@@ -84,6 +89,7 @@ namespace bugtracker.Controllers
         }
 
         // GET: Issues/Edit/5
+        [Authorize]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null || _context.Issues == null)
@@ -104,6 +110,7 @@ namespace bugtracker.Controllers
         // POST: Issues/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Name,Description,Priority,DueDate,Type,Status,CreatedBy,CompletedBy,Assigned")] Issue issue)
         {
             if (id != issue.Id)
@@ -138,6 +145,7 @@ namespace bugtracker.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> EditModal(int id, [Bind("Id,Name,Description,Priority,DueDate,Type,Status,CreatedBy,CompletedBy,Assigned")] Issue issue)
         {
             if (id != issue.Id)
@@ -171,6 +179,7 @@ namespace bugtracker.Controllers
         }
 
         // GET: Issues/Delete/5
+        [Authorize]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null || _context.Issues == null)
@@ -191,6 +200,7 @@ namespace bugtracker.Controllers
         // POST: Issues/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Issues == null)

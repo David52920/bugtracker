@@ -114,10 +114,23 @@ public class AccountController : Controller
         return View(user);
     }
 
-        public async Task<IActionResult> Logout()
-        {
-            await _signInManager.SignOutAsync();
-            HttpContext.User = new GenericPrincipal(new GenericIdentity(string.Empty), null);
-            return RedirectToAction("Login");
+    public async Task<IActionResult> Logout()
+    {
+        await _signInManager.SignOutAsync();
+        HttpContext.Session.Clear();
+        return RedirectToAction("Login");
+    }
+
+    public IActionResult AccessDenied()
+    {
+        return View("AccessDenied");
+    }
+
+    public IActionResult AccessDeniedRedirect()
+    {
+        if (User.Identity.IsAuthenticated){
+            return RedirectToAction("Index", "Home");
         }
+        return RedirectToAction("Login");
+    }
 }
