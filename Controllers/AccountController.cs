@@ -73,7 +73,7 @@ public class AccountController : Controller
                 result = await _userManager.AddToRoleAsync(user, "Member");
                 if (result.Succeeded){
                     _notifyService.Success("Successfully registered account.");
-                    return RedirectToAction("index", "Account");
+                    return RedirectToAction("Index", "Account");
                 }
             }
 
