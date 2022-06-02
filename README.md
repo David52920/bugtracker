@@ -22,7 +22,7 @@
 
 # Popup notifications
 <h3>Notifications appear when user does certain actions ie. Login, Register, Edit, Create</h3>
-<img src=./Content/assets/notifications.PNG>
+<img src=./Content/assets/notification.PNG>
 
 # Roles
 <h3>Admin can now assign/create/delete roles per user </h3>
